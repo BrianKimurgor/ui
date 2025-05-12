@@ -1,80 +1,126 @@
-"use client"; // Client-side rendering
+"use client"; 
 
-import { useState, useEffect } from "react";
-import { useRouter, useParams  } from "next/navigation";
-import { Badge } from "@/types/badge"; // Import Badge type
-import BadgeForm from "@/components/BadgeForm"; // Import BadgeForm component
-// import { useToast } from "@/components/Toast"; // Optional: For showing toast messages
+import { useEffect, useState } from "react";
+import { useRouter, useParams } from "next/navigation";
+import { getBadgeById, updateBadge } from "@/services/badgeService/badgeService";
+import { Badge, UpdateBadgeDto } from "@/types/badge";
+
+
 
 export default function BadgeEdit() {
-  const [badge, setBadge] = useState<Badge | null>(null);
-  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const params = useParams(); // Use useParams to get route parameters
-  const id = params?.id as string | undefined; // badge ID from the URL
-  if (!id) {
-    return <p>Invalid badge ID.</p>;
-  }
+  const params = useParams();
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
 
-//   const toast = useToast(); // Optional: For showing toast messages after update
+  const [badge, setBadge] = useState<Badge | null>(null);
+  const [formData, setFormData] = useState({
+    Name: "",
+    Description: "",
+    ImageUrl: "",
+  });
 
+  // Fetch badge data by id when `id` is available
   useEffect(() => {
-    if (id) {
-      // Simulate fetching badge data (replace with actual data fetching logic)
-      const fetchBadge = async () => {
-        // Here you would fetch the data from an API or database
-        // For the sake of this example, I'm using static data
-        const fetchedBadge = {
-          id: id,
-          name: `Badge ${id}`,
-          description: `Description for Badge ${id}`,
-          imageUrl: `/badges/${id}.png`,
-        };
-        
-        setBadge(fetchedBadge);
-        setLoading(false);
-      };
+    const fetchBadge = async () => {
+      if (!id) return;
 
-      fetchBadge();
-    }
+      try {
+        const fetchedBadge = await getBadgeById(id);
+
+        if (!fetchedBadge) {
+          console.error("No badge found!");
+          return;
+        }
+
+        setFormData({
+          Name: fetchedBadge.Name ?? "",
+          Description: fetchedBadge.Description ?? "",
+          ImageUrl: fetchedBadge.ImageUrl ?? "",
+        });
+
+        setBadge(fetchedBadge);
+      } catch (err) {
+        console.error("Failed to fetch badge:", err);
+      }
+    };
+
+    fetchBadge();
   }, [id]);
 
-  const handleUpdateBadge = async (updatedBadge: Badge) => {
-    // Here, you'd send a request to update the badge data in your backend.
-    // Simulating a success response after updating the badge.
-
-    // toast.success("Badge updated successfully!");
-    console.log("Updated Badge:", updatedBadge);
-    
-    // Navigate back to the badges list after updating
-    router.push("/dashboard/badges");
+  // Handle input changes
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  if (!badge) {
-    return <p>Badge not found.</p>;
-  }
+    if (!badge) return;
+
+    const updatedBadge: Badge = {
+      Id: badge.Id,
+      Name: formData.Name,
+      Description: formData.Description,
+      ImageUrl: formData.ImageUrl,
+      CreatedAt: badge.CreatedAt, // Include the CreatedAt property
+    };
+
+    try {
+      await updateBadge(badge.Id.toString(), updatedBadge);
+      router.push("/dashboard/badges");
+    } catch (err) {
+      console.error("Failed to update badge:", err);
+    }
+  };
+  
 
   return (
-    <section className="w-full mx-auto px-2 py-4">
-      <h2 className="text-4xl font-extrabold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-700 to-green-400 mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <h1 className="text-4xl font-bold text-center mb-10 text-indigo-600">
         Edit Badge
-      </h2>
-
-      {/* Pass the existing badge data to the BadgeForm */}
-      <BadgeForm
-        initialData={badge} // Pass the existing badge data as initial values
-        onSubmit={handleUpdateBadge} // Handle the update logic
-        onSave={handleUpdateBadge} // Handle the save logic (could be the same as update)
-        onDelete={(id: string) => {
-          console.log(`Badge with id ${id} deleted.`);
-          // Add actual deletion logic here
-          router.push("/dashboard/badges");
-        }} // Handle badge deletion (if needed)
-      />
-    </section>
+      </h1>
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
+        <h1 className="text-3xl font-bold mb-6 text-center">Edit Badge</h1>
+        <form>
+          {/* Form fields for editing badge */}
+          <input
+            type="text"
+            name="Name"
+            placeholder="Badge Name"
+            value={formData.Name}
+            onChange={handleChange}
+            required
+            className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2 mb-4"
+          />
+          <textarea
+            name="Description"
+            placeholder="Description"
+            value={formData.Description}
+            onChange={handleChange}
+            required
+            className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2 mb-4"
+          />
+          <input
+            type="text"
+            name="ImageUrl"
+            placeholder="Image URL"
+            value={formData.ImageUrl}
+            onChange={handleChange}
+            required
+            className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2 mb-4"
+          />
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="btn btn-primary bg-green-600 hover:bg-green-700 text-white p-2 rounded-md mb-6 w-full"
+          >
+            Update Badge
+          </button>
+        </form>
+      </div>
+    </div>
   );
 }

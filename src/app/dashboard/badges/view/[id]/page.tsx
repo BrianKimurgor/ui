@@ -1,59 +1,68 @@
 "use client"; // Client-side rendering
 
-import { useEffect, useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import { Badge } from "@/types/badge"; // Import the Badge type
-import BadgeDetails from "@/components/BadgeDetails";
+import {  useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { getBadgeById } from "@/services/badgeService/badgeService";
+import { Badge } from "@/types/badge";
 
 export default function BadgeView() {
-  const [badge, setBadge] = useState<Badge | null>(null);
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
   const params = useParams();
-  const id = params?.id as string | undefined;
-  if (!id) {
-    router.push("/dashboard/badges"); // Redirect or handle the case where id is null
-    return null;
-  }
+  const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
+  const [badge, setBadge] = useState<Badge | null>(null);
 
   useEffect(() => {
-    if (id) {
-      // Simulate fetching badge data (replace with actual data fetching)
-      const fetchedBadge = {
-        id: id,
-        name: `Badge ${id}`,
-        description: `Description for Badge ${id}`,
-        imageUrl: `/badges/${id}.png`,
-      };
+    const fetchBadge = async () => {
+      if (!id) return;
 
-      // Set the fetched badge data
-      setBadge(fetchedBadge);
-      setLoading(false);
-    }
+      try {
+        const fetchedBadge = await getBadgeById(id);
+
+        if (!fetchedBadge) {
+          console.error("No badge found!");
+          return;
+        }
+
+        setBadge(fetchedBadge);
+      } catch (err) {
+        console.error("Failed to fetch badge:", err);
+      }
+    };
+
+    fetchBadge();
   }, [id]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
+  // Display loading text while waiting for badge data
   if (!badge) {
-    return <p>Badge not found.</p>;
+    return <p>Loading badge...</p>;
   }
 
   return (
-    <section className="w-full mx-auto px-2 py-4">
-      <h2 className="text-4xl font-extrabold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-green-400 via-green-700 to-green-400 mb-8">
+   
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
+      <h1 className="text-4xl font-bold text-center mb-10 text-indigo-600">
         Badge Details
-      </h2>
-
-      <BadgeDetails 
-        badge={badge} 
-        onDelete={(id: string) => {
-          console.log(`Badge with id ${id} deleted.`);
-          // Add actual deletion logic here
-          router.push("/dashboard/badges");
-        }} 
-      /> {/* Pass the badge to BadgeDetails */}
-    </section>
+      </h1>
+      <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
+        <h1 className="text-3xl font-bold mb-6 text-center">{badge.Name}</h1>
+        <div className="flex justify-center mb-6">
+          <img
+            src={badge.ImageUrl}
+            alt={badge.Name}
+            className="w-full h-64 object-cover rounded-xl"
+          />
+        </div>
+        <p className="text-xl">{badge.Description}</p>
+        <p className="text-md font-semibold">Created At:</p>
+        <p className="text-md">{new Date(badge.CreatedAt).toLocaleDateString()}</p>
+      </div>
+      <div className="flex justify-center mt-6">
+        <button
+          onClick={() => window.history.back()}
+          className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-md"
+        >
+          Back
+        </button>
+        </div>
+    </div>
   );
 }

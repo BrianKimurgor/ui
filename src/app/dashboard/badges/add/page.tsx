@@ -1,40 +1,70 @@
 "use client";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import BadgeForm from "@/components/BadgeForm";
-import { Badge } from "@/types/badge";
+import { createBadge } from "@/services/badgeService/badgeService";
 
-export default function Page() {
+export default function AddBadgePage() {
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    Name: "",
+    Description: "",
+    ImageUrl: "",
+  });
 
-  // Function to handle saving a new badge
-  const handleSave = (newBadge: Badge) => {
-    // Here you would typically make an API call to save the badge to your database
-    console.log("New Badge Added: ", newBadge);
-    // Redirect back to the badges list page after saving
-    router.push("/dashboard/badges");
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Function to handle badge deletion (although this will not be used on Add page)
-  const handleDelete = (id: string) => {
-    // Deleting a badge is not necessary on the Add page, but function is required for form
-    console.log(`Delete Badge with ID: ${id}`);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await createBadge(formData);
+      router.push("/dashboard/badges");
+    } catch (error) {
+      console.error("Failed to create badge:", error);
+    }
   };
+
 
   return (
-    <section>
-      <h1 className="text-3xl font-bold text-center mb-8">Add a New Badge</h1>
-      <BadgeForm
-        onSave={handleSave}
-        onDelete={handleDelete}  // Even though delete isn't needed here, it's required for the form
-        badge={undefined}  // No badge is passed, indicating this is for a new badge
-        initialData={{
-          id: "",
-          name: "",
-          description: "",
-          imageUrl: "",
-        }}  // Initial data for a new badge
-        onSubmit={handleSave}  // Handle form submission
-      />
-    </section>
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
+      <h1 className="text-2xl font-bold mb-6 text-center">Add New Badge</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          name="Name"
+          placeholder="Badge Name"
+          value={formData.Name}
+          onChange={handleChange}
+          required
+          className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
+        />
+        <textarea
+          name="Description"
+          placeholder="Description"
+          value={formData.Description}
+          onChange={handleChange}
+          required
+          className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
+        />
+        <input
+          type="text"
+          name="ImageUrl"
+          placeholder="Image URL"
+          value={formData.ImageUrl}
+          onChange={handleChange}
+          required
+          className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
+        />
+        <button
+          type="submit"
+          className="btn btn-primary bg-green-600 hover:bg-green-700 text-white p-2 rounded-md mb-6 w-full"
+        >
+          Add Badge
+        </button>
+      </form>
+    </div>
   );
 }

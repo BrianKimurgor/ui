@@ -8,7 +8,6 @@ import { Project } from '@/types/project';
 export default function ViewProjectPage() {
   const params = useParams(); // ✅ Correct hook to get dynamic route params
   const id = Array.isArray(params?.id) ? params.id[0] : params?.id;
-
   const [project, setProject] = useState<Project | null>(null);
 
   // Fetch project data by id when `id` is available
