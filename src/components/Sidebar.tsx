@@ -10,7 +10,6 @@ const Sidebar: React.FC = () => {
         <li><Link href="/dashboard">Dashboard</Link></li>
         <li><Link href="/dashboard/badges">Badges</Link></li>
         <li><Link href="/dashboard/projects">Projects</Link></li>
-        <li><Link href="/dashboard/skills">Skills</Link></li>
         <li><Link href="/dashboard/experience">Experience</Link></li>
         <li><Link href="/dashboard/education">Education</Link></li>
         <li><Link href="/dashboard/social">Social Links</Link></li>
