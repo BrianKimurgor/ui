@@ -176,9 +176,9 @@ export default function PortfolioPage() {
 // Helper components
 // Helper components
 interface NavItemProps {
-  href: string;
-  icon: React.ReactNode;
-  label: string;
+  readonly href: string;
+  readonly icon: React.ReactNode;
+  readonly label: string;
 }
 
 function NavItem({ href, icon, label }: NavItemProps) {
@@ -198,10 +198,10 @@ function NavItem({ href, icon, label }: NavItemProps) {
 }
 
 interface SocialLinkProps {
-  href: string;
-  icon: React.ReactNode;
-  color: string;
-  hoverColor: string;
+  readonly href: string;
+  readonly icon: React.ReactNode;
+  readonly color: string;
+  readonly hoverColor: string;
 }
 
 function SocialLink({ href, icon, color, hoverColor }: SocialLinkProps) {
