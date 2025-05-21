@@ -8,15 +8,15 @@ export const getProjects = async (): Promise<Project[]> => {
 
   // Normalize keys
   return rawProjects.map((p: Project) => ({
-    id: p.Id,
-    title: p.Title,
-    description: p.Description,
-    techStack: p.Tags ?? [],
-    imageUrl: p.ImageUrl,
-    githubUrl: p.GitHubUrl,
+    id: p.id,
+    title: p.title,
+    description: p.description,
+    techStack: p.tags ?? [],
+    imageUrl: p.imageUrl,
+    githubUrl: p.githubUrl,
     LiveDemoUrl: p.LiveDemoUrl,
-    createdAt: p.CreatedAt,
-    updatedAt: p.UpdatedAt,
+    createdAt: p.createdAt,
+    updatedAt: p.updatedAt,
   }));
 };
 
