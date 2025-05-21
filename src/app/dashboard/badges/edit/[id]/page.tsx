@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { getBadgeById, updateBadge } from "@/services/badgeService/badgeService";
-import { Badge, UpdateBadgeDto } from "@/types/badge";
+import { Badge } from "@/types/badge";
 
 
 

@@ -7,7 +7,7 @@ export const getBadges = async (): Promise<Badge[]> => {
   const rawBadges = response.data;
 
   // Normalize keys
-  return rawBadges.map((b: any) => ({
+  return rawBadges.map((b: Badge) => ({
     Id: b.Id,
     Name: b.Name,
     Description: b.Description,

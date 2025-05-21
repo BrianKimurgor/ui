@@ -5,16 +5,12 @@ import {
   Camera,
   Linkedin,
   Github,
-  Info,
   Mail,
-  FileText,
-  Folder,
-  Briefcase,
   Menu,
   X,
   ExternalLink,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Sidebar from "@/components/Sidebartwo";
 
 
@@ -162,7 +158,7 @@ export default function PortfolioPage() {
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Let's Connect
+                Let&lsquo;s Connect
                 <ExternalLink size={18} />
               </motion.a>
             </motion.div>
@@ -170,30 +166,6 @@ export default function PortfolioPage() {
         </motion.div>
       </div>
     </div>
-  );
-}
-
-// Helper components
-// Helper components
-interface NavItemProps {
-  readonly href: string;
-  readonly icon: React.ReactNode;
-  readonly label: string;
-}
-
-function NavItem({ href, icon, label }: NavItemProps) {
-  return (
-    <motion.a
-      href={href}
-      className="group relative flex flex-col items-center justify-center w-12 h-12 text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 transition-colors duration-200"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {icon}
-      <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap">
-        {label}
-      </span>
-    </motion.a>
   );
 }
 

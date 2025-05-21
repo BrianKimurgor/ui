@@ -204,7 +204,7 @@ export default function AboutPage() {
                 </h2>
                 <div className="space-y-4 text-gray-700 dark:text-gray-300">
                   <p>
-                    I'm a passionate software engineer with expertise in full-stack development,
+                    I&apos;m a passionate software engineer with expertise in full-stack development,
                     specializing in building scalable web applications and robust backend systems.
                     My journey in tech began with a curiosity about how systems work and has
                     evolved into a career creating solutions that solve real-world problems.
@@ -270,12 +270,12 @@ export default function AboutPage() {
                 </h2>
                 <div className="text-gray-700 dark:text-gray-300 space-y-4">
                   <p>
-                    When I'm not building software, you can find me reading psychology books,
+                    When I&apos;m not building software, you can find me reading psychology books,
                     exploring agricultural innovations, or contributing to open-source projects.
                     I believe in continuous learning and sharing knowledge with the community.
                   </p>
                   <p>
-                    I'm also passionate about mentoring junior developers and helping bridge the
+                    I&apos;m also passionate about mentoring junior developers and helping bridge the
                     gap between education and industry requirements in tech.
                   </p>
                 </div>
@@ -311,7 +311,7 @@ export default function AboutPage() {
               {/* CTA Section */}
               <div className="text-center border-t border-gray-200 dark:border-gray-700 pt-8">
                 <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-6">
-                  Want to see what I've built?
+                  Want to see what I&apos;ve built?
                 </h3>
                 <motion.a
                   href="/projects"
@@ -327,35 +327,5 @@ export default function AboutPage() {
         </motion.div>
       </div>
     </div>
-  );
-}
-
-// NavItem component with TypeScript
-interface NavItemProps {
-  readonly href: string;
-  readonly icon: React.ReactNode;
-  readonly label: string;
-  readonly active?: boolean;
-}
-
-function NavItem({ href, icon, label, active = false }: NavItemProps) {
-  return (
-    <motion.a
-      href={href}
-      className={`group relative flex flex-col items-center justify-center w-12 h-12 
-      ${
-        active
-          ? "text-green-600 dark:text-green-400"
-          : "text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"
-      } 
-      transition-colors duration-200`}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {icon}
-      <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap">
-        {label}
-      </span>
-    </motion.a>
   );
 }

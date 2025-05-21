@@ -1,3 +1,4 @@
+"use client";
 import StatsCard from '@/components/StatsCard';
 import { FaProjectDiagram, FaTools, FaBriefcase, FaCheckCircle } from 'react-icons/fa';
 
@@ -54,7 +55,7 @@ export default function Page() {
                             <li className="p-4 hover:bg-gray-50">
                                 <div className="flex justify-between flex-row">
                                     <div className="flex flex-row items-center">
-                                        <p className="font-medium text-gray-800">Added new project "AI Portfolio Analyzer"</p>
+                                        <p className="font-medium text-gray-800">Added new project &quot;AI Portfolio Analyzer&quot;</p>
                                         <p className="text-sm text-gray-500 ml-9">Apr 25, 2025 at 10:30 AM</p>
                                     </div>
                                     <span className="badge badge-primary">Project</span>
@@ -63,7 +64,7 @@ export default function Page() {
                             <li className="p-4 hover:bg-gray-50">
                                 <div className="flex justify-between">
                                     <div className="flex flex-row items-center">
-                                        <p className="font-medium text-gray-800">Updated skill "TypeScript" to Expert level</p>
+                                        <p className="font-medium text-gray-800">Updated skill &quot;TypeScript&quot; to Expert level</p>
                                         <p className="text-sm text-gray-500 ml-9">Apr 25, 2025 at 9:15 AM</p>
                                     </div>
                                     <span className="badge badge-secondary">Skill</span>
@@ -72,7 +73,7 @@ export default function Page() {
                             <li className="p-4 hover:bg-gray-50">
                                 <div className="flex justify-between">
                                     <div className="flex flex-row items-center">
-                                        <p className="font-medium text-gray-800">Updated work experience at "TechCorp"</p>
+                                        <p className="font-medium text-gray-800">Updated work experience at &quot;TechCorp&quot;</p>
                                         <p className="text-sm text-gray-500 ml-9">Apr 22, 2025 at 9:45 AM</p>
                                     </div>
                                     <span className="badge badge-accent">Experience</span>

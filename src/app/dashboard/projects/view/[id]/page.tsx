@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation'; // ✅ Import useParams
 import { getProjectById } from '@/services/projectService/projectService';
 import { Project } from '@/types/project';
+import Image from 'next/image'; 
 
 export default function ViewProjectPage() {
   const params = useParams(); // ✅ Correct hook to get dynamic route params
@@ -42,8 +43,8 @@ export default function ViewProjectPage() {
       <h1 className="text-3xl font-bold mb-6 text-center">{project.title}</h1>
       <div className="space-y-6">
         <div className="flex justify-center">
-          <img
-            src={project.imageUrl}
+          <Image
+            src={project.imageUrl ?? "/placeholder.png"}
             alt={project.title}
             className="w-full h-64 object-cover rounded-xl mb-6"
           />

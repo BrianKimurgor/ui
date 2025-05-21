@@ -7,7 +7,7 @@ export const getProjects = async (): Promise<Project[]> => {
   const rawProjects = response.data;
 
   // Normalize keys
-  return rawProjects.map((p: any) => ({
+  return rawProjects.map((p: Project) => ({
     id: p.Id,
     title: p.Title,
     description: p.Description,

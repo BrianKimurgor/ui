@@ -1,28 +1,28 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Badge } from "@/types/badge";
 import { useRouter } from "next/navigation";
 
 interface BadgeFormProps {
   badge?: Badge; // Optional prop for editing a badge
-  initialData: Badge; 
+  initialData: Badge;
   onSubmit: (badge: Badge) => void; // Function to handle form submission
   onSave: (badge: Badge) => void;
   onDelete: (id: string) => void; // Function to handle badge deletion
 }
 
 const BadgeForm = ({ badge, onSave }: BadgeFormProps) => {
-  
-  const [name, setName] = useState<string>(badge ? badge.name : "");
-  const [description, setDescription] = useState<string>(badge ? badge.description : "");
-  const [imageUrl, setImageUrl] = useState<string>(badge ? badge.imageUrl : "");
+
+  const [name, setName] = useState<string>(badge ? badge.Name : "");
+  const [description, setDescription] = useState<string>(badge ? badge.Description : "");
+  const [imageUrl, setImageUrl] = useState<string>(badge ? badge.ImageUrl : "");
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const newBadge: Badge = {
-      id: badge ? badge.id : Date.now().toString(), // Generate a new id for new badges
+      Id: badge ? badge.Id : Date.now().toString(), // Generate a new id for new badges
       name,
       description,
       imageUrl,

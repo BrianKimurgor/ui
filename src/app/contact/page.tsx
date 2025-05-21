@@ -128,7 +128,7 @@ export default function ContactPage() {
                             >
                                 <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">Get In Touch</h2>
                                 <p className="text-gray-600 dark:text-gray-300 mb-8">
-                                    Feel free to reach out with any questions or opportunities. I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
+                                    Feel free to reach out with any questions or opportunities. I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision.
                                 </p>
 
                                 <div className="space-y-6">
@@ -269,34 +269,6 @@ export default function ContactPage() {
                 </motion.div>
             </div>
         </div>
-    );
-}
-
-
-interface NavItemProps {
-    readonly href: string;
-    readonly icon: React.ReactNode;
-    readonly label: string;
-    readonly active: boolean;
-}
-// Helper components
-function NavItem({ href, icon, label, active }: NavItemProps) {
-    return (
-        <motion.a
-            href={href}
-            className={`group relative flex flex-col items-center justify-center w-12 h-12 
-      ${active
-                    ? "text-green-600 dark:text-green-400"
-                    : "text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400"} 
-      transition-colors duration-200`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-        >
-            {icon}
-            <span className="absolute left-full ml-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none whitespace-nowrap">
-                {label}
-            </span>
-        </motion.a>
     );
 }
 

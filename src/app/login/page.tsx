@@ -33,7 +33,11 @@ export default function Login() {
         setError(data.message || 'Invalid credentials');
       }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      if (err instanceof Error) {
+        setError(err.message || 'Something went wrong. Please try again.');
+      } else {
+        setError('Something went wrong. Please try again.');
+      }
     }
   };
 
@@ -76,7 +80,7 @@ export default function Login() {
         </div>
       </form>
       <p className="text-center text-sm">
-        Don't have an account?{' '}
+        Don&lsquo;t have an account?{' '}
         <a href="/register" className="text-blue-500 hover:underline">Register here</a>
       </p>
     </div>
