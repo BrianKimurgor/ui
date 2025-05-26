@@ -17,7 +17,7 @@ export default function DashboardLayout({
                 <Sidebar />
 
                 {/* Scrollable Content Area */}
-                <main className="flex-1 overflow-y-auto p-4">{children}</main>
+                <main className="flex-1 overflow-y-auto p-4 bg-gray-100 dark:bg-gray-900">{children}</main>
             </div>
 
             {/* Fixed Footer */}
