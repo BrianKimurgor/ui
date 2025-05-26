@@ -50,7 +50,7 @@ function ExperienceCard({
 }
 
 export default function ExperiencePage() {
-  const [experience, setExperience] = useState(initialExperience);
+  const [experience] = useState(initialExperience);
 
   const handleAddExperience = () => {
     alert('Trigger experience creation modal/form');

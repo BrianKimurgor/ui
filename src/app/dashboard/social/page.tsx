@@ -193,8 +193,8 @@ export default function SocialsPage() {
                   Where to find me
                 </h3>
                 <p className="text-gray-700 dark:text-gray-300 mb-6">
-                  I'm most active on GitHub, Twitter, and LinkedIn. Feel free to
-                  reach out on any platform - I'm always open to interesting
+                  I&apos;m most active on GitHub, Twitter, and LinkedIn. Feel free to
+                  reach out on any platform - I&apos;m always open to interesting
                   discussions, collaborations, or just saying hello!
                 </p>
                 <div className="flex flex-wrap gap-4">

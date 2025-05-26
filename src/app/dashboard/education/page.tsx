@@ -50,7 +50,8 @@ function EducationCard({
 }
 
 export default function EducationPage() {
-  const [education, setEducation] = useState(initialEducation);
+  const [education] = useState(initialEducation);
+  
 
   const handleAddEducation = () => {
     alert('Trigger education creation modal/form');

@@ -32,7 +32,7 @@ function SkillCard({ name, level, onEdit }: { name: string; level: string; onEdi
 }
 
 export default function SkillsPage() {
-  const [skills, setSkills] = useState(initialSkills);
+  const [skills] = useState(initialSkills);
 
   const handleAddSkill = () => {
     alert('Trigger skill creation modal/form');

@@ -9,10 +9,6 @@ import {
   ArrowUp,
 } from "lucide-react";
 import { motion} from "framer-motion";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-
 
 type ActivityItem = {
   id: number;
