@@ -9,6 +9,7 @@ import {
   BookOpen,
   GraduationCap,
   Share2,
+  Brain,
 } from 'lucide-react';
 
 const links = [
@@ -18,6 +19,7 @@ const links = [
   { href: '/dashboard/experience', label: 'Experience', icon: BookOpen },
   { href: '/dashboard/education', label: 'Education', icon: GraduationCap },
   { href: '/dashboard/social', label: 'Social Links', icon: Share2 },
+  { href: '/dashboard/skills', label: 'Skills', icon: Brain },
 ];
 
 const Sidebar: React.FC = () => {

@@ -9,6 +9,10 @@ import {
   ArrowUp,
 } from "lucide-react";
 import { motion} from "framer-motion";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
 
 type ActivityItem = {
   id: number;
@@ -135,7 +139,6 @@ export default function DashboardPage() {
   return (
     <div className="h-full w-full bg-gray-100 dark:bg-gray-900 p-4 md:p-8 relative">
       {/* Mobile Toggle Button */}
-
       {/* Main Content */}
       <div className="md:ml-20 flex justify-center items-start min-h-screen py-8">
         <motion.div
