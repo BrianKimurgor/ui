@@ -14,7 +14,8 @@ export default function ProjectsPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const data = await getProjects(); // using service instead of raw fetch
+        const data = await getProjects(); 
+        console.log(data);
         setProjects(data);
       } catch (err) {
         console.error('Failed to fetch projects', err);
@@ -26,23 +27,23 @@ export default function ProjectsPage() {
     fetchProjects();
   }, []);
 
-  const handleView = (id: string) => {
-    // Redirect to the view page with the project ID
-    router.push(`/dashboard/projects/view/${id}`);
+  const handleView = (Id: string) => {
+    // Redirect to the view page with the project Id
+    router.push(`/dashboard/projects/view/${Id}`);
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (Id: string) => {
     try {
-      await deleteProject(id); // Call delete service to delete project
-      setProjects(projects.filter((project) => project.id !== id)); // Remove project from the list
+      await deleteProject(Id); // Call delete service to delete project
+      setProjects(projects.filter((project) => project.Id !== Id)); // Remove project from the list
     } catch (error) {
       console.error('Failed to delete project:', error);
     }
   };
 
-  const handleEdit = (id: string) => {
-    // Redirect to the edit page with the project ID
-    router.push(`/dashboard/projects/edit/${id}`);
+  const handleEdit = (Id: string) => {
+    // Redirect to the edit page with the project Id
+    router.push(`/dashboard/projects/edit/${Id}`);
   };
 
   const handleAddProject = () => {
@@ -69,26 +70,26 @@ export default function ProjectsPage() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {projects.map((project) => (
             <div
-              key={project.id}
+              key={project.Id}
               className="rounded-2xl shadow-lg bg-white p-5 hover:shadow-indigo-300 transition-all duration-300 border border-indigo-100"
             >
-              {project.imageUrl && (
+              {project.ImageUrl && (
                 <Image
-                  src={project.imageUrl}
-                  alt={project.title}
+                  src={project.ImageUrl}
+                  alt={project.Title}
                   width={200}
                   height={200}
                   className="w-full h-40 object-cover rounded-xl mb-4"
                 />
               )}
 
-              <h2 className="text-xl font-semibold text-indigo-700">{project.title || 'Untitled Project'}</h2>
+              <h2 className="text-xl font-semibold text-indigo-700">{project.Title || 'Untitled Project'}</h2>
 
-              <p className="text-gray-600 mt-2">{project.description}</p>
+              <p className="text-gray-600 mt-2">{project.Description}</p>
 
-              {project.tags?.length ? (
+              {project.Tags?.length ? (
                 <div className="flex flex-wrap gap-2 mt-3">
-                  {project.tags.map((tag: string) => (
+                  {project.Tags.map((tag: string) => (
                     <span
                       key={tag}
                       className="bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-1 rounded-full"
@@ -101,9 +102,9 @@ export default function ProjectsPage() {
 
 
               <div className="flex gap-4 mt-4">
-                {project.githubUrl && (
+                {project.GitHubUrl && (
                   <a
-                    href={project.githubUrl}
+                    href={project.GitHubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-indigo-600 hover:underline"
@@ -126,19 +127,19 @@ export default function ProjectsPage() {
               {/* Action Buttons */}
               <div className="flex gap-4 mt-4">
                 <button
-                  onClick={() => handleEdit(project.id)}
+                  onClick={() => handleEdit(project.Id)}
                   className="btn btn-sm btn-indigo bg-amber-600 hover:bg-amber-700 text-white  p-2 rounded-md"
                 >
                   Edit
                 </button>
                 <button
-                  onClick={() => handleDelete(project.id)}
+                  onClick={() => handleDelete(project.Id)}
                   className="btn btn-sm btn-red bg-red-600 hover:bg-red-700 text-white p-2 rounded-md"
                 >
                   Delete
                 </button>
                 <button
-                  onClick={() => handleView(project.id)}
+                  onClick={() => handleView(project.Id)}
                   className="btn btn-sm btn-red bg-green-600 hover:bg-green-700 text-white p-2 rounded-md"
                 >
                   View

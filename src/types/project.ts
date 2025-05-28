@@ -1,32 +1,32 @@
 export interface Project {
-  id: string;
-  title: string;
-  description: string;
-  tags?: string[];
-  imageUrl?: string;
-  githubUrl?: string;
+  Id: string;
+  Title: string;
+  Description: string;
+  Tags?: string[];
+  ImageUrl?: string;
+  GitHubUrl?: string;
   LiveDemoUrl?: string;
-  createdAt: string;
-  updatedAt: string;
+  CreatedAt: string;
+  UpdatedAt: string;
 }
 
 
 export interface CreateProjectDto {
-  title: string;
-  description: string;
-  tags?: string[];
-  imageUrl?: string;
-  githubUrl?: string;
+  Title: string;
+  Description: string;
+  Tags?: string[];
+  ImageUrl?: string;
+  GitHubUrl?: string;
   LiveDemoUrl?: string;
 }
 
 export interface UpdateProjectDto {
-  id: string;
-  title?: string;
-  description?: string;
-  tags?: string[];
-  imageUrl?: string;
-  githubUrl?: string;
+  Id: string;
+  Title: string;
+  Description: string;
+  Tags?: string[];
+  ImageUrl?: string;
+  GitHubUrl?: string;
   LiveDemoUrl?: string;
-  updatedAt: string;
+  UpdatedAt: string;
 }

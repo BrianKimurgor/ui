@@ -8,12 +8,12 @@ export default function AddProjectPage() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    techStack: '',
-    imageUrl: '',
-    githubUrl: '',
-    liveUrl: '',
+    Title: '',
+    Description: '',
+    TechStack: '',
+    ImageUrl: '',
+    GitHubUrl: '',
+    LiveDemoUrl: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -24,8 +24,12 @@ export default function AddProjectPage() {
     e.preventDefault();
     try {
       await createProject({
-        ...formData,
-        tags: formData.techStack.split(',').map(s => s.trim()),
+        Title: formData.Title,
+        Description: formData.Description,
+        Tags: formData.TechStack.split(',').map(s => s.trim()),
+        ImageUrl: formData.ImageUrl,
+        GitHubUrl: formData.GitHubUrl,
+        LiveDemoUrl: formData.LiveDemoUrl,
       });
       router.push('/dashboard/projects');
     } catch (error) {
@@ -41,7 +45,7 @@ export default function AddProjectPage() {
           type="text"
           name="title"
           placeholder="Project Name"
-          value={formData.title}
+          value={formData.Title}
           onChange={handleChange}
           required
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
@@ -49,7 +53,7 @@ export default function AddProjectPage() {
         <textarea
           name="description"
           placeholder="Description"
-          value={formData.description}
+          value={formData.Description}
           onChange={handleChange}
           required
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
@@ -58,7 +62,7 @@ export default function AddProjectPage() {
           type="text"
           name="techStack"
           placeholder="Tech Stack (comma separated)"
-          value={formData.techStack}
+          value={formData.TechStack}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
@@ -66,15 +70,15 @@ export default function AddProjectPage() {
           type="text"
           name="imageUrl"
           placeholder="Image URL"
-          value={formData.imageUrl}
+          value={formData.ImageUrl}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
         <input
           type="text"
-          name="githubUrl"
+          name="GitHubUrl"
           placeholder="GitHub URL"
-          value={formData.githubUrl}
+          value={formData.GitHubUrl}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
@@ -82,7 +86,7 @@ export default function AddProjectPage() {
           type="text"
           name="liveUrl"
           placeholder="Live URL"
-          value={formData.liveUrl}
+          value={formData.LiveDemoUrl}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />

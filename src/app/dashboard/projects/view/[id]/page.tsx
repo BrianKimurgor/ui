@@ -40,25 +40,27 @@ export default function ViewProjectPage() {
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-6 bg-white shadow-xl rounded-2xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">{project.title}</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">{project.Title}</h1>
       <div className="space-y-6">
         <div className="flex justify-center">
           <Image
-            src={project.imageUrl ?? "/placeholder.png"}
-            alt={project.title}
+            src={project.ImageUrl ?? "/placeholder.png"}
+            alt={project.Title}
+            width={200}
+            height={200}
             className="w-full h-64 object-cover rounded-xl mb-6"
           />
         </div>
-        <p className="text-xl">{project.description}</p>
+        <p className="text-xl">{project.Description}</p>
         <p className="text-md font-semibold">Tech Stack:</p>
         <ul className="list-disc pl-6">
-          {project.tags?.map((tech) => (
+          {project.Tags?.map((tech) => (
             <li key={tech} className="text-md">{tech}</li>
           ))}
         </ul>
         <div className="flex justify-between mt-6">
           <a
-            href={project.githubUrl}
+            href={project.GitHubUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-outline bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md"

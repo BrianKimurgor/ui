@@ -8,42 +8,42 @@ export const getProjects = async (): Promise<Project[]> => {
 
   // Normalize keys
   return rawProjects.map((p: Project) => ({
-    id: p.id,
-    title: p.title,
-    description: p.description,
-    techStack: p.tags ?? [],
-    imageUrl: p.imageUrl,
-    githubUrl: p.githubUrl,
+    Id: p.Id,
+    Title: p.Title,
+    Description: p.Description,
+    Tags: p.Tags ?? [],
+    ImageUrl: p.ImageUrl,
+    GitHubUrl: p.GitHubUrl,
     LiveDemoUrl: p.LiveDemoUrl,
-    createdAt: p.createdAt,
-    updatedAt: p.updatedAt,
+    CreatedAt: p.CreatedAt,
+    UpdatedAt: p.UpdatedAt,
   }));
 };
 
-export const getProjectById = async (id: string): Promise<Project> => {
+export const getProjectById = async (Id: string): Promise<Project> => {
   try {
-    const response = await api.get(`/api/projects/${id}`);
+    const response = await api.get(`/api/projects/${Id}`);
 
     if (response.status === 200) {
       const p = response.data;
 
       // Normalize keys
       return {
-        id: p.Id,
-        title: p.Title,
-        description: p.Description,
-        tags: p.Tags ?? [],
-        imageUrl: p.ImageUrl,
-        githubUrl: p.GitHubUrl,
+        Id: p.Id,
+        Title: p.Title,
+        Description: p.Description,
+        Tags: p.Tags ?? [],
+        ImageUrl: p.ImageUrl,
+        GitHubUrl: p.GitHubUrl,
         LiveDemoUrl: p.LiveDemoUrl,
-        createdAt: p.CreatedAt,
-        updatedAt: p.UpdatedAt,
+        CreatedAt: p.CreatedAt,
+        UpdatedAt: p.UpdatedAt,
       };
     } else {
       throw new Error('Failed to fetch project data');
     }
   } catch (error) {
-    console.error(`Error fetching project with id ${id}:`, error);
+    console.error(`Error fetching project with id ${Id}:`, error);
     throw error;
   }
 };

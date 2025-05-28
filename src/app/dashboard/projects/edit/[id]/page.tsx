@@ -16,11 +16,11 @@ export default function EditProjectPage() {
   
   const [project, setProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    tags: '',
-    imageUrl: '',
-    githubUrl: '',
+    Title: '',
+    Description: '',
+    Tags: '',
+    ImageUrl: '',
+    GitHubUrl: '',
     LiveDemoUrl: '',
   });
 
@@ -38,24 +38,24 @@ export default function EditProjectPage() {
         }
   
         setFormData({
-            title: fetchedProject.title ?? '',
-            description: fetchedProject.description ?? '',
-            tags: (fetchedProject.tags ?? []).join(', '),
-            imageUrl: fetchedProject.imageUrl ?? '',
-            githubUrl: fetchedProject.githubUrl ?? '',
+            Title: fetchedProject.Title ?? '',
+            Description: fetchedProject.Description ?? '',
+            Tags: (fetchedProject.Tags ?? []).join(', '),
+            ImageUrl: fetchedProject.ImageUrl ?? '',
+            GitHubUrl: fetchedProject.GitHubUrl ?? '',
             LiveDemoUrl: fetchedProject.LiveDemoUrl ?? '',
           });
           
           setProject({
-            id: fetchedProject.id,
-            title: fetchedProject.title,
-            description: fetchedProject.description,
-            tags: fetchedProject.tags,
-            imageUrl: fetchedProject.imageUrl,
-            githubUrl: fetchedProject.githubUrl,
+            Id: fetchedProject.Id,
+            Title: fetchedProject.Title,
+            Description: fetchedProject.Description,
+            Tags: fetchedProject.Tags,
+            ImageUrl: fetchedProject.ImageUrl,
+            GitHubUrl: fetchedProject.GitHubUrl,
             LiveDemoUrl: fetchedProject.LiveDemoUrl,
-            createdAt: fetchedProject.createdAt,
-            updatedAt: fetchedProject.updatedAt,
+            CreatedAt: fetchedProject.CreatedAt,
+            UpdatedAt: fetchedProject.UpdatedAt,
           });
           
       } catch (err) {
@@ -78,26 +78,26 @@ export default function EditProjectPage() {
   
     // Prepare the DTO object
     const updatedProject: UpdateProjectDto = {
-      id: project.id,  // The project id to identify which project to update
-      title: formData.title || project.title,  // Use existing value if no update
-      description: formData.description || project.description,
-      tags: formData.tags ? formData.tags.split(',').map(s => s.trim()) : project.tags,
-      imageUrl: formData.imageUrl || project.imageUrl,
-      githubUrl: formData.githubUrl || project.githubUrl,
+      Id: project.Id,
+      Title: formData.Title || project.Title,  // Use existing value if no update
+      Description: formData.Description || project.Description,
+      Tags: formData.Tags ? formData.Tags.split(',').map(s => s.trim()) : project.Tags,
+      ImageUrl: formData.ImageUrl || project.ImageUrl,
+      GitHubUrl: formData.GitHubUrl || project.GitHubUrl,
       LiveDemoUrl: formData.LiveDemoUrl || project.LiveDemoUrl,
-      updatedAt: new Date().toISOString(),  // Set the current time as updatedAt
+      UpdatedAt: new Date().toISOString(),  // Set the current time as updatedAt
     };
   
     try {
-      await updateProject(project.id, { 
+      await updateProject(project.Id, { 
         ...updatedProject, 
-        title: updatedProject.title ?? '', 
-        description: updatedProject.description ?? '', 
-        tags: updatedProject.tags ?? [], 
-        imageUrl: updatedProject.imageUrl ?? '', 
-        githubUrl: updatedProject.githubUrl ?? '', 
+        Title: updatedProject.Title ?? '', 
+        Description: updatedProject.Description ?? '', 
+        Tags: updatedProject.Tags ?? [], 
+        ImageUrl: updatedProject.ImageUrl ?? '', 
+        GitHubUrl: updatedProject.GitHubUrl ?? '', 
         LiveDemoUrl: updatedProject.LiveDemoUrl ?? '', 
-        createdAt: project.createdAt 
+        CreatedAt: project.CreatedAt 
       });  // Ensure all fields have default values
       router.push('/dashboard/projects');
     } catch (error) {
@@ -117,42 +117,42 @@ export default function EditProjectPage() {
       <form onSubmit={handleSubmit} className="space-y-4 ">
         <input
           type="text"
-          name="title"
+          name="Title"
           placeholder="Project Name"
-          value={formData.title}
+          value={formData.Title}
           onChange={handleChange}
           required
           className="input input-bordered border-blue-100 w-full border-2 rounded-md p-2"
         />
         <textarea
-          name="description"
+          name="Description"
           placeholder="Description"
-          value={formData.description}
+          value={formData.Description}
           onChange={handleChange}
           required
           className="textarea textarea-bordered border-blue-100 w-full border-2 rounded-md p-2"
         />
         <input
           type="text"
-          name="tags"
+          name="Tags"
           placeholder="Tech Stack (comma separated)"
-          value={formData.tags}
+          value={formData.Tags}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
         <input
           type="text"
-          name="imageUrl"
+          name="ImageUrl"
           placeholder="Image URL"
-          value={formData.imageUrl}
+          value={formData.ImageUrl}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
         <input
           type="text"
-          name="githubUrl"
+          name="GitHubUrl"
           placeholder="GitHub URL"
-          value={formData.githubUrl}
+          value={formData.GitHubUrl}
           onChange={handleChange}
           className="input input-bordered w-full border-blue-100 border-2 rounded-md p-2"
         />
