@@ -4,10 +4,55 @@ import { getBadges, deleteBadge } from '@/services/badgeService/badgeService';
 import { Badge } from '@/types/badge';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Plus, Award, Pencil } from 'lucide-react';
 
+function BadgeCard({
+  badge,
+  onEdit,
+  onDelete,
+  onView,
+}: {
+  badge: Badge;
+  onEdit: () => void;
+  onDelete: () => void;
+  onView: () => void;
+}) {
+  return (
+    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col items-center justify-between min-h-[320px]">
+      <Image
+        src={badge.ImageUrl}
+        alt={badge.Name}
+        width={120}
+        height={120}
+        className="mb-4 rounded-full object-cover border-4 border-teal-200 dark:border-teal-700"
+      />
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-1 text-center">{badge.Name}</h3>
+      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 text-center">{badge.Description}</p>
+      <div className="flex gap-2 mt-2">
+        <button
+          onClick={onEdit}
+          className="text-sm px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded-md flex items-center gap-1"
+        >
+          <Pencil className="w-4 h-4" /> Edit
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-sm px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md"
+        >
+          Delete
+        </button>
+        <button
+          onClick={onView}
+          className="text-sm px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md"
+        >
+          View
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function BadgesPage() {
-
   const router = useRouter();
   const [badges, setBadges] = useState<Badge[]>([]);
   const [loading, setLoading] = useState(true);
@@ -15,7 +60,7 @@ export default function BadgesPage() {
   useEffect(() => {
     async function fetchBadges() {
       try {
-        const data = await getBadges(); // using service instead of raw fetch
+        const data = await getBadges();
         setBadges(data);
       } catch (err) {
         console.error('Failed to fetch badges', err);
@@ -23,78 +68,57 @@ export default function BadgesPage() {
         setLoading(false);
       }
     }
-
     fetchBadges();
   }, []);
 
   const handleView = (id: string) => {
-    // Redirect to the view page with the badge ID
     router.push(`/dashboard/badges/view/${id}`);
   };
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteBadge(id); // Call delete service to delete badge
-      setBadges(badges.filter((badge) => badge.Id !== Number(id))); // Remove badge from the list
+      await deleteBadge(id);
+      setBadges(badges.filter((badge) => badge.Id !== Number(id)));
     } catch (error) {
       console.error('Failed to delete badge:', error);
     }
   };
 
   const handleEdit = (id: string) => {
-    // Redirect to the edit page with the badge ID
     router.push(`/dashboard/badges/edit/${id}`);
   };
 
   const handleAddBadge = () => {
-    // Redirect to the add badge page
     router.push('/dashboard/badges/add');
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className='mb-6 flex flex-row items-center justify-between'>
-        <h1 className="text-4xl font-bold text-center mb-10 text-indigo-600">My Badges</h1>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <Award className="w-6 h-6 text-teal-600 dark:text-teal-400 mr-2" />
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Badges</h2>
+        </div>
         <button
           onClick={handleAddBadge}
-          className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-md mb-6"
+          className="flex items-center gap-1 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md transition"
         >
-          Add New Badge
+          <Plus className="w-4 h-4" />
+          Add Badge
         </button>
       </div>
-
       {loading ? (
-        <p className="text-center text-gray-600">Loading badges...</p>
+        <p className="text-center text-gray-600 dark:text-gray-300">Loading badges...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {badges.map((badge) => (
-            <div
+            <BadgeCard
               key={badge.Id}
-              className="bg-white shadow-md rounded-lg p-4 flex flex-col items-center"
-            >
-              <Image
-                src={badge.ImageUrl}
-                alt={badge.Name}
-                width={200}
-                height={200}
-                className="mb-4 rounded-full object-cover"
-              />
-
-              <h2
-                className="text-xl font-semibold mb-2"
-              >
-                {badge.Name}
-              </h2>
-              <p className="text-gray-600 mb-4">
-                {badge.Description}
-              </p>
-              <div className="flex space-x-2">
-                <button onClick={() => handleEdit(badge.Id.toString())} className="btn btn-secondary bg-yellow-500 hover:bg-yellow-600 text-white p-2 rounded-md">Edit</button>
-                <button onClick={() => handleDelete(badge.Id.toString())} className="btn btn-danger bg-red-500 hover:bg-red-600 text-white p-2 rounded-md">Delete</button>
-                <button onClick={() => handleView(badge.Id.toString())} className="btn btn-primary bg-green-500 hover:bg-green-600 text-white p-2 rounded-md">View</button>
-
-              </div>
-            </div>
+              badge={badge}
+              onEdit={() => handleEdit(badge.Id.toString())}
+              onDelete={() => handleDelete(badge.Id.toString())}
+              onView={() => handleView(badge.Id.toString())}
+            />
           ))}
         </div>
       )}

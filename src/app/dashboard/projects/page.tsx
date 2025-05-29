@@ -5,6 +5,91 @@ import { getProjects, deleteProject } from '@/services/projectService/projectSer
 import { Project } from '@/types/project';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Plus, FolderKanban, Pencil } from 'lucide-react';
+
+function ProjectCard({
+  project,
+  onEdit,
+  onDelete,
+  onView,
+}: {
+  project: Project;
+  onEdit: () => void;
+  onDelete: () => void;
+  onView: () => void;
+}) {
+  return (
+    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[320px]">
+      {project.ImageUrl && (
+        <Image
+          src={project.ImageUrl}
+          alt={project.Title}
+          width={200}
+          height={200}
+          className="w-full h-40 object-cover rounded-xl mb-4"
+        />
+      )}
+      <div className="flex-1">
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{project.Title || 'Untitled Project'}</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">{project.Description}</p>
+        {project.Tags?.length ? (
+          <div className="flex flex-wrap gap-2 mt-3">
+            {project.Tags.map((tag: string) => (
+              <span
+                key={tag}
+                className="bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300 text-xs font-medium px-2 py-1 rounded-full"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        ) : null}
+        <div className="flex gap-4 mt-4">
+          {project.GitHubUrl && (
+            <a
+              href={project.GitHubUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-teal-600 dark:text-teal-400 hover:underline"
+            >
+              GitHub
+            </a>
+          )}
+          {project.LiveDemoUrl && (
+            <a
+              href={project.LiveDemoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-teal-600 dark:text-teal-400 hover:underline"
+            >
+              Live Demo
+            </a>
+          )}
+        </div>
+      </div>
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={onEdit}
+          className="text-sm px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded-md flex items-center gap-1"
+        >
+          <Pencil className="w-4 h-4" /> Edit
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-sm px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md"
+        >
+          Delete
+        </button>
+        <button
+          onClick={onView}
+          className="text-sm px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md"
+        >
+          View
+        </button>
+      </div>
+    </div>
+  );
+}
 
 export default function ProjectsPage() {
   const router = useRouter();
@@ -14,7 +99,7 @@ export default function ProjectsPage() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const data = await getProjects(); 
+        const data = await getProjects();
         console.log(data);
         setProjects(data);
       } catch (err) {
@@ -52,100 +137,33 @@ export default function ProjectsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-6">
-      <div className='mb-6 flex flex-row items-center justify-between'>
-        <h1 className="text-4xl font-bold text-center mb-10 text-indigo-600">My Projects</h1>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center">
+          <FolderKanban className="w-6 h-6 text-teal-600 dark:text-teal-400 mr-2" />
+          <h2 className="text-2xl font-bold text-gray-800 dark:text-white">Projects</h2>
+        </div>
         <button
           onClick={handleAddProject}
-          className="btn btn-primary bg-indigo-600 hover:bg-indigo-700 text-white p-2 rounded-md mb-6"
+          className="flex items-center gap-1 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-md transition"
         >
-          Add New Project
+          <Plus className="w-4 h-4" />
+          Add Project
         </button>
       </div>
 
-
       {loading ? (
-        <p className="text-center text-gray-600">Loading projects...</p>
+        <p className="text-center text-gray-600 dark:text-gray-300">Loading projects...</p>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {projects.map((project) => (
-            <div
+            <ProjectCard
               key={project.Id}
-              className="rounded-2xl shadow-lg bg-white p-5 hover:shadow-indigo-300 transition-all duration-300 border border-indigo-100"
-            >
-              {project.ImageUrl && (
-                <Image
-                  src={project.ImageUrl}
-                  alt={project.Title}
-                  width={200}
-                  height={200}
-                  className="w-full h-40 object-cover rounded-xl mb-4"
-                />
-              )}
-
-              <h2 className="text-xl font-semibold text-indigo-700">{project.Title || 'Untitled Project'}</h2>
-
-              <p className="text-gray-600 mt-2">{project.Description}</p>
-
-              {project.Tags?.length ? (
-                <div className="flex flex-wrap gap-2 mt-3">
-                  {project.Tags.map((tag: string) => (
-                    <span
-                      key={tag}
-                      className="bg-indigo-100 text-indigo-700 text-xs font-medium px-2 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              ): null}
-
-
-              <div className="flex gap-4 mt-4">
-                {project.GitHubUrl && (
-                  <a
-                    href={project.GitHubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-indigo-600 hover:underline"
-                  >
-                    GitHub
-                  </a>
-                )}
-                {project.LiveDemoUrl && (
-                  <a
-                    href={project.LiveDemoUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-indigo-600 hover:underline"
-                  >
-                    Live Demo
-                  </a>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex gap-4 mt-4">
-                <button
-                  onClick={() => handleEdit(project.Id)}
-                  className="btn btn-sm btn-indigo bg-amber-600 hover:bg-amber-700 text-white  p-2 rounded-md"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDelete(project.Id)}
-                  className="btn btn-sm btn-red bg-red-600 hover:bg-red-700 text-white p-2 rounded-md"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => handleView(project.Id)}
-                  className="btn btn-sm btn-red bg-green-600 hover:bg-green-700 text-white p-2 rounded-md"
-                >
-                  View
-                </button>
-              </div>
-            </div>
+              project={project}
+              onEdit={() => handleEdit(project.Id)}
+              onDelete={() => handleDelete(project.Id)}
+              onView={() => handleView(project.Id)}
+            />
           ))}
         </div>
       )}
