@@ -1,63 +1,82 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Briefcase, Plus, Pencil } from 'lucide-react';
-
-const initialExperience = [
-  {
-    company: 'Happy Heart Agrochemicals',
-    role: 'Software Engineer',
-    period: '2021 - 2023',
-  },
-  {
-    company: 'ALX Africa',
-    role: 'Software Engineering Intern',
-    period: '2022 - 2023',
-  },
-  {
-    company: 'Teach2Give',
-    role: 'Backend Developer',
-    period: '2023',
-  },
-];
+import { getWorks, deleteWork } from '@/services/workService/workService';
+import { WorkDto } from '@/types/work';
+import { useRouter } from 'next/navigation';
 
 function ExperienceCard({
-  company,
-  role,
-  period,
+  work,
   onEdit,
+  onDelete,
 }: {
-  readonly company: string;
-  readonly role: string;
-  readonly period: string;
+  work: WorkDto;
   onEdit: () => void;
+  onDelete: () => void;
 }) {
   return (
-    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex justify-between items-start">
+    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[180px]">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{company}</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300">{role}</p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">{period}</p>
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{work.CompanyName}</h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300">{work.JobTitle}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {work.StartDate ? new Date(work.StartDate).toLocaleDateString() : ''} - {work.EndDate ? new Date(work.EndDate).toLocaleDateString() : 'Present'}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{work.Description}</p>
       </div>
-      <button
-        onClick={onEdit}
-        className="text-sm px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded-md"
-      >
-        <Pencil className="w-4 h-4" />
-      </button>
+      <div className="flex gap-2 mt-4">
+        <button
+          onClick={onEdit}
+          className="text-sm px-2 py-1 bg-teal-500 hover:bg-teal-600 text-white rounded-md flex items-center gap-1"
+        >
+          <Pencil className="w-4 h-4" /> Edit
+        </button>
+        <button
+          onClick={onDelete}
+          className="text-sm px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }
 
 export default function ExperiencePage() {
-  const [experience] = useState(initialExperience);
+  const router = useRouter();
+  const [experience, setExperience] = useState<WorkDto[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchExperience() {
+      try {
+        const data = await getWorks();
+        setExperience(data);
+      } catch (err) {
+        console.error('Failed to fetch experience', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchExperience();
+  }, []);
 
   const handleAddExperience = () => {
-    alert('Trigger experience creation modal/form');
+    router.push('/dashboard/experience/add');
   };
 
-  const handleEditExperience = (company: string) => {
-    alert(`Edit experience at: ${company}`);
+  const handleEditExperience = (id: string) => {
+    router.push(`/dashboard/experience/edit/${id}`);
+  };
+
+  const handleDeleteExperience = async (id: string) => {
+    try {
+      await deleteWork(id);
+      setExperience(experience.filter((exp) => exp.Id !== id));
+    } catch (error) {
+      console.error('Failed to delete experience:', error);
+    }
   };
 
   return (
@@ -75,18 +94,20 @@ export default function ExperiencePage() {
           Add Experience
         </button>
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {experience.map((exp) => (
-          <ExperienceCard
-            key={exp.company}
-            company={exp.company}
-            role={exp.role}
-            period={exp.period}
-            onEdit={() => handleEditExperience(exp.company)}
-          />
-        ))}
-      </div>
+      {loading ? (
+        <p className="text-center text-gray-600 dark:text-gray-300">Loading experience...</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          {experience.map((exp) => (
+            <ExperienceCard
+              key={exp.Id}
+              work={exp}
+              onEdit={() => handleEditExperience(exp.Id)}
+              onDelete={() => handleDeleteExperience(exp.Id)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
