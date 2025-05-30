@@ -1,23 +1,23 @@
 "use client";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createWork } from "@/services/workService/workService";
-import { CreateWorkDto } from "@/types/work";
-import { ToastContainer, toast } from 'react-toastify';
+import { CreateEducationDto } from "@/types/education";
+import { createEducation } from "@/services/educationService/educationService";
+import { ToastContainer, toast } from "react-toastify";
 
-export default function AddExperiencePage() {
+export default function AddEducationPage() {
     const router = useRouter();
-    const [form, setForm] = useState<CreateWorkDto>({
-        CompanyName: "",
-        JobTitle: "",
-        LogoUrl: "",
-        Description: "",
+    const [form, setForm] = useState({
+        SchoolName: "",
+        Degree: "",
+        FieldOfStudy: "",
     });
     const [startDate, setStartDate] = useState("");
     const [endDate, setEndDate] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
@@ -25,72 +25,62 @@ export default function AddExperiencePage() {
         e.preventDefault();
         setLoading(true);
         try {
-            await createWork({
+            const educationData: CreateEducationDto = {
                 ...form,
-                StartDate: startDate ? new Date(startDate) : undefined,
-                EndDate: endDate ? new Date(endDate) : undefined,
-            } as CreateWorkDto);
-            toast.success("Experience added successfully!");
-            setTimeout(() => router.push("/dashboard/experience"), 1200);
+                StartDate: new Date(startDate).toISOString(),
+                EndDate: endDate ? new Date(endDate).toISOString() : "",
+            };            
+    
+            await createEducation(educationData);
+            toast.success("Education added successfully!");
+            setTimeout(() => router.push("/dashboard/education"), 1200);
         } catch (err) {
             const error = err as Error;
-            console.error("Error creating work:", error.message);
-            toast.error(error.message || "Failed to add experience.");
+            console.error("Error creating education:", error.message);
+            toast.error(error.message || "Failed to add education.");
         } finally {
             setLoading(false);
         }
     };
-    
 
     return (
         <div className="max-w-xl mx-auto p-6 bg-white dark:bg-gray-900 rounded-lg shadow-md mt-8">
             <ToastContainer />
-            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Add Experience</h2>
+            <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-white">Add Education</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                    <label htmlFor="CompanyName" className="block text-gray-700 dark:text-gray-200 mb-1">Company Name</label>
+                    <label htmlFor="SchoolName" className="block text-gray-700 dark:text-gray-200 mb-1">School Name</label>
                     <input
-                        id="CompanyName"
+                        id="SchoolName"
                         type="text"
-                        name="CompanyName"
-                        value={form.CompanyName}
+                        name="SchoolName"
+                        value={form.SchoolName}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white"
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="JobTitle" className="block text-gray-700 dark:text-gray-200 mb-1">Job Title</label>
+                    <label htmlFor="Degree" className="block text-gray-700 dark:text-gray-200 mb-1">Degree</label>
                     <input
-                        id="JobTitle"
+                        id="Degree"
                         type="text"
-                        name="JobTitle"
-                        value={form.JobTitle}
+                        name="Degree"
+                        value={form.Degree}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white"
                         required
                     />
                 </div>
                 <div>
-                    <label htmlFor="LogoUrl" className="block text-gray-700 dark:text-gray-200 mb-1">Logo URL</label>
+                    <label htmlFor="FieldOfStudy" className="block text-gray-700 dark:text-gray-200 mb-1">Field of Study</label>
                     <input
-                        id="LogoUrl"
+                        id="FieldOfStudy"
                         type="text"
-                        name="LogoUrl"
-                        value={form.LogoUrl}
+                        name="FieldOfStudy"
+                        value={form.FieldOfStudy}
                         onChange={handleChange}
                         className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white"
-                    />
-                </div>
-                <div>
-                    <label htmlFor="Description" className="block text-gray-700 dark:text-gray-200 mb-1">Description</label>
-                    <textarea
-                        id="Description"
-                        name="Description"
-                        value={form.Description}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 border rounded-md bg-gray-50 dark:bg-gray-800 dark:text-white"
-                        rows={3}
                         required
                     />
                 </div>
@@ -122,7 +112,7 @@ export default function AddExperiencePage() {
                     className="w-full bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded-md transition"
                     disabled={loading}
                 >
-                    {loading ? "Adding..." : "Add Experience"}
+                    {loading ? "Adding..." : "Add Education"}
                 </button>
             </form>
         </div>

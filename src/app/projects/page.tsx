@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebartwo";
 import { getProjects } from "@/services/projectService/projectService";
 import { Project } from "@/types/project";
+import Image from "next/image";
 ;
 
 export default function ProjectsPage() {
@@ -130,7 +131,7 @@ export default function ProjectsPage() {
                     <div className="h-48 bg-gray-200 dark:bg-gray-700 relative overflow-hidden">
                       <div className="h-48 relative overflow-hidden">
                         {project.ImageUrl ? (
-                          <img
+                          <Image
                             src={project.ImageUrl}
                             alt={project.Title}
                             className="w-full h-full object-cover"

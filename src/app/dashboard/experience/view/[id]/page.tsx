@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { getWorkById } from "@/services/workService/workService";
 import { WorkDto } from "@/types/work";
 import { ToastContainer, toast } from 'react-toastify';
+import Image from "next/image";
 export default function ViewExperiencePage() {
     const params = useParams();
     const router = useRouter();
@@ -62,7 +63,7 @@ export default function ViewExperiencePage() {
             {work.LogoUrl && (
                 <div className="mb-4">
                     <span className="block text-gray-700 dark:text-gray-200 font-semibold">Logo:</span>
-                    <img src={work.LogoUrl} alt="Company Logo" className="h-16 w-16 object-contain rounded border mt-2" />
+                    <Image src={work.LogoUrl} alt="Company Logo" className="h-16 w-16 object-contain rounded border mt-2" />
                 </div>
             )}
             <div className="mb-4">
