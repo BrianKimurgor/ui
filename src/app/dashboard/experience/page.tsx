@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Briefcase, Plus, Pencil } from 'lucide-react';
+import { Briefcase, Plus, Pencil, Eye } from 'lucide-react';
 import { getWorks, deleteWork } from '@/services/workService/workService';
 import { WorkDto } from '@/types/work';
 import { useRouter } from 'next/navigation';
@@ -10,10 +10,12 @@ function ExperienceCard({
   work,
   onEdit,
   onDelete,
+  onView,
 }: {
   work: WorkDto;
   onEdit: () => void;
   onDelete: () => void;
+  onView: () => void;
 }) {
   return (
     <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[180px]">
@@ -37,6 +39,12 @@ function ExperienceCard({
           className="text-sm px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-md"
         >
           Delete
+        </button>
+        <button
+          onClick={onView}
+          className="text-sm px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md flex items-center gap-1"
+        >
+          <Eye className="w-4 h-4" /> View
         </button>
       </div>
     </div>
@@ -79,6 +87,10 @@ export default function ExperiencePage() {
     }
   };
 
+  const handleViewExperience = (id: string) => {
+    router.push(`/dashboard/experience/view/${id}`);
+  };
+
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
@@ -104,6 +116,7 @@ export default function ExperiencePage() {
               work={exp}
               onEdit={() => handleEditExperience(exp.Id)}
               onDelete={() => handleDeleteExperience(exp.Id)}
+              onView={() => handleViewExperience(exp.Id)}
             />
           ))}
         </div>
