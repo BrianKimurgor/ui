@@ -6,17 +6,19 @@ import { getWorks, deleteWork } from '@/services/workService/workService';
 import { WorkDto } from '@/types/work';
 import { useRouter } from 'next/navigation';
 
+
+type ExperienceCardProps = {
+  readonly work: WorkDto;
+  readonly onEdit: () => void;
+  readonly onDelete: () => void;
+  readonly onView: () => void;
+};
 function ExperienceCard({
   work,
   onEdit,
   onDelete,
   onView,
-}: {
-  work: WorkDto;
-  onEdit: () => void;
-  onDelete: () => void;
-  onView: () => void;
-}) {
+}: ExperienceCardProps) {
   return (
     <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[180px]">
       <div>
