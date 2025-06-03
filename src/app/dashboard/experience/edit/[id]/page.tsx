@@ -4,6 +4,7 @@ import { useRouter, useParams } from "next/navigation";
 import { getWorkById, updateWork } from "@/services/workService/workService";
 import { UpdateWorkDto, WorkDto } from "@/types/work";
 import { ToastContainer, toast } from 'react-toastify';
+import { getProjects } from "@/services/projectService/projectService";
 
 export default function EditExperiencePage() {
     const router = useRouter();
@@ -15,6 +16,8 @@ export default function EditExperiencePage() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
+    const [Tags, setTags] = useState<string[]>([]);
+    const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
     useEffect(() => {
         async function fetchWork() {
@@ -31,8 +34,7 @@ export default function EditExperiencePage() {
                 });
                 setStartDate(data.StartDate ? new Date(data.StartDate).toISOString().split("T")[0] : "");
                 setEndDate(data.EndDate ? new Date(data.EndDate).toISOString().split("T")[0] : "");
-            } catch (err)
-            {
+            } catch (err) {
                 const error = err as Error;
                 console.error("Error fetching work:", error.message);
                 toast.error(error.message || "Failed to fetch experience.");
@@ -41,7 +43,32 @@ export default function EditExperiencePage() {
             }
         }
         if (id) fetchWork();
+
+        async function fetchSkills() {
+            try {
+                const projects = await getProjects();
+                const allTags = projects.flatMap((project) => project.Tags || []);
+                const uniqueTags = [...new Set(allTags)];
+                setTags(uniqueTags);
+            } catch (error) {
+                console.error("Failed to fetch skills:", error);
+                toast.error("Failed to load skills.");
+            }
+        }
+        fetchSkills();
     }, [id]);
+
+    const handleTagClick = (tag: string) => {
+        if (selectedTags.includes(tag)) {
+            setSelectedTags(selectedTags.filter(t => t !== tag));
+        }
+        else {
+            setSelectedTags([...selectedTags, tag]);
+        }
+    }
+    const handleRemoveTag = (tag: string) => {
+        setSelectedTags(selectedTags.filter((t) => t !== tag));
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (!form) return;
@@ -58,7 +85,9 @@ export default function EditExperiencePage() {
                 ...form,
                 StartDate: startDate ? new Date(startDate) : form.StartDate,
                 EndDate: endDate ? new Date(endDate) : form.EndDate,
+                Tags: selectedTags  // <-- include selectedTags here
             });
+
             router.push("/dashboard/experience");
         } catch (err) {
             const error = err as Error;
@@ -127,6 +156,51 @@ export default function EditExperiencePage() {
                         rows={3}
                         required
                     />
+                </div>
+                {/* Selected Tags Preview */}
+                {selectedTags.length > 0 && (
+                    <div className="mb-4">
+                        <label className="block text-gray-700 dark:text-gray-200 mb-1">
+                            Selected Technologies:
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                            {selectedTags.map((tag) => (
+                                <div
+                                    key={tag}
+                                    className="flex items-center bg-teal-600 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-teal-700 transition"
+                                    onClick={() => handleRemoveTag(tag)}
+                                    title="Click to remove"
+                                >
+                                    {tag} <span className="ml-2 text-sm font-bold">×</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Available Tags */}
+                <div>
+                    <label
+                        htmlFor="Technologies"
+                        className="block text-gray-700 dark:text-gray-200 mb-1"
+                    >
+                        Technologies Used
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                        {Tags.map((tag) => (
+                            <button
+                                type="button"
+                                key={tag}
+                                className={`px-3 py-1 rounded-full border ${selectedTags.includes(tag)
+                                    ? "bg-teal-600 text-white"
+                                    : "bg-gray-200 dark:bg-gray-700 dark:text-gray-300"
+                                    } hover:bg-teal-700 hover:text-white transition`}
+                                onClick={() => handleTagClick(tag)}
+                            >
+                                {tag}
+                            </button>
+                        ))}
+                    </div>
                 </div>
                 <div className="flex gap-4">
                     <div className="flex-1">

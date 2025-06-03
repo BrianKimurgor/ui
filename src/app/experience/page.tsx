@@ -10,10 +10,14 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import Sidebar from "@/components/Sidebartwo";
+import { WorkDto } from "@/types/work";
+import { getWorks } from "@/services/workService/workService";
 
 export default function ExperiencePage() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [mounted, setMounted] = useState(false);
+    const [works, setWorks] = useState<WorkDto[]>([]);
+    const [experiencesFromAPI, setExperiencesFromAPI] = useState<WorkDto[]>([]);
     const [expandedExperience, setExpandedExperience] = useState<number | null>(0);
 
     // Handle hydration issues
@@ -23,6 +27,31 @@ export default function ExperiencePage() {
 
     // Close sidebar when clicking outside on mobile
     useEffect(() => {
+
+        const fetchWorks = async () => {
+            try {
+                const data: WorkDto[] = await getWorks();
+                
+                const normalized = data.map((work: WorkDto) => ({
+                    Id: work.Id,
+                    CompanyName: work.CompanyName,
+                    JobTitle: work.JobTitle,
+                    LogoUrl: work.LogoUrl,
+                    Description: work.Description,
+                    Responsibilities: work.Responsibilities || [],
+                    Tags: work.Tags || [],
+                    Location: work.Location || "",
+                    StartDate: work.StartDate ? new Date(work.StartDate) : null,
+                    EndDate: work.EndDate ? new Date(work.EndDate) : null,
+                }));
+
+                setExperiencesFromAPI(normalized);
+            } catch (error) {
+                console.error("Failed to fetch works:", error);
+            }
+        };
+        fetchWorks();
+
         const handleClickOutside = (event: MouseEvent) => {
             const target = event.target as HTMLElement;
             if (
@@ -48,69 +77,7 @@ export default function ExperiencePage() {
         setExpandedExperience(expandedExperience === index ? null : index);
     };
 
-    const experiences = [
-        {
-            title: "Software Engineer",
-            company: "Griffinglobal Technologies",
-            period: "Jan 2024 - Present",
-            location: "Nairobi, Kenya",
-            description:
-                "Building scalable systems and APIs, contributing to system architecture and DevOps infrastructure. Leading frontend development with React and Next.js.",
-            responsibilities: [
-                "Developed and maintained core product features using TypeScript, React, and Next.js",
-                "Designed and implemented RESTful APIs with .NET Core",
-                "Optimized database queries reducing response times by 40%",
-                "Mentored junior developers and conducted code reviews",
-                "Implemented CI/CD pipelines reducing deployment times by 60%",
-            ],
-            technologies: [
-                "TypeScript",
-                "React/Next.js",
-                ".NET Core",
-                "PostgreSQL",
-                "Docker",
-                "Azure",
-            ],
-        },
-        {
-            title: "Junior Developer",
-            company: "Tech Innovations Ltd.",
-            period: "Jun 2022 - Dec 2023",
-            location: "Remote",
-            description:
-                "Developed responsive web applications and contributed to the company's design system. Worked on both frontend and backend components using TypeScript and Node.js.",
-            responsibilities: [
-                "Built reusable UI components with React and TailwindCSS",
-                "Collaborated on backend services using Node.js and Express",
-                "Participated in Agile development processes",
-                "Fixed bugs and improved application performance",
-                "Contributed to documentation and knowledge sharing",
-            ],
-            technologies: [
-                "JavaScript",
-                "React",
-                "Node.js",
-                "MongoDB",
-                "TailwindCSS",
-                "Git",
-            ],
-        },
-        {
-            title: "Web Development Intern",
-            company: "Digital Solutions Agency",
-            period: "Jan 2022 - May 2022",
-            location: "Nairobi, Kenya",
-            description:
-                "Assisted in developing client websites and web applications. Gained hands-on experience with modern web technologies.",
-            responsibilities: [
-                "Created responsive landing pages from Figma designs",
-                "Implemented WordPress themes and plugins",
-                "Performed website maintenance and updates",
-                "Assisted in client meetings and requirement gathering",
-            ],
-            technologies: ["HTML/CSS", "JavaScript", "WordPress", "PHP", "Bootstrap"],
-        },
-    ];
+
 
     return (
         <div className="min-h-screen w-full bg-gray-100 dark:bg-gray-900 p-4 md:p-8 relative">
@@ -157,91 +124,103 @@ export default function ExperiencePage() {
 
                             {/* Experience Timeline */}
                             <div className="space-y-8">
-                                {experiences.map((exp, index) => (
-                                    <motion.div
-                                        key={index}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                                        className="border-l-2 border-green-500 dark:border-green-400 pl-6 relative pb-6"
-                                    >
-                                        <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-green-500 dark:bg-green-400"></div>
+                                {experiencesFromAPI.map((exp, index) => {
+                                    // Format dates nicely
+                                    const startDate = exp.StartDate
+                                        ? new Date(exp.StartDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+                                        : "N/A";
+                                    const endDate = exp.EndDate
+                                        ? new Date(exp.EndDate).toLocaleDateString(undefined, { year: 'numeric', month: 'short' })
+                                        : "Present";
+                                    const period = `${startDate} - ${endDate}`;
 
-                                        <div
-                                            className="cursor-pointer"
-                                            onClick={() => toggleExperience(index)}
+                                    return (
+                                        <motion.div
+                                            key={exp.Id}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.3, delay: index * 0.1 }}
+                                            className="border-l-2 border-green-500 dark:border-green-400 pl-6 relative pb-6"
                                         >
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                                                        {exp.title}
-                                                    </h3>
-                                                    <p className="text-lg text-gray-700 dark:text-gray-300">
-                                                        {exp.company}
-                                                    </p>
+                                            <div className="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-green-500 dark:bg-green-400"></div>
+
+                                            <div
+                                                className="cursor-pointer"
+                                                onClick={() => toggleExperience(index)}
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                                            {exp.JobTitle}
+                                                        </h3>
+                                                        <p className="text-lg text-gray-700 dark:text-gray-300">
+                                                            {exp.CompanyName}
+                                                        </p>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                                                        <Calendar size={14} />
+                                                        {period}
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
-                                                    <Calendar size={14} />
-                                                    {exp.period}
+                                                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                                    {exp.Location || "N/A"}
+                                                </p>
+                                                <p className="text-gray-700 dark:text-gray-300 mt-2">
+                                                    {exp.Description}
+                                                </p>
+                                                <div className="mt-2 flex justify-end">
+                                                    {expandedExperience === index ? (
+                                                        <ChevronUp size={20} className="text-green-600 dark:text-green-400" />
+                                                    ) : (
+                                                        <ChevronDown size={20} className="text-green-600 dark:text-green-400" />
+                                                    )}
                                                 </div>
                                             </div>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                                                {exp.location}
-                                            </p>
-                                            <p className="text-gray-700 dark:text-gray-300 mt-2">
-                                                {exp.description}
-                                            </p>
-                                            <div className="mt-2 flex justify-end">
-                                                {expandedExperience === index ? (
-                                                    <ChevronUp size={20} className="text-green-600 dark:text-green-400" />
-                                                ) : (
-                                                    <ChevronDown size={20} className="text-green-600 dark:text-green-400" />
-                                                )}
-                                            </div>
-                                        </div>
 
-                                        <AnimatePresence>
-                                            {expandedExperience === index && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: "auto" }}
-                                                    exit={{ opacity: 0, height: 0 }}
-                                                    transition={{ duration: 0.3 }}
-                                                    className="overflow-hidden"
-                                                >
-                                                    <div className="mt-4 space-y-4">
-                                                        <div>
-                                                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                                                                Key Responsibilities:
-                                                            </h4>
-                                                            <ul className="space-y-2 list-disc pl-5 text-gray-700 dark:text-gray-300">
-                                                                {exp.responsibilities.map((item, i) => (
-                                                                    <li key={i}>{item}</li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
+                                            <AnimatePresence>
+                                                {expandedExperience === index && (
+                                                    <motion.div
+                                                        initial={{ opacity: 0, height: 0 }}
+                                                        animate={{ opacity: 1, height: "auto" }}
+                                                        exit={{ opacity: 0, height: 0 }}
+                                                        transition={{ duration: 0.3 }}
+                                                        className="overflow-hidden"
+                                                    >
+                                                        <div className="mt-4 space-y-4">
+                                                            <div>
+                                                                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                                                                    Key Responsibilities:
+                                                                </h4>
+                                                                <ul className="space-y-2 list-disc pl-5 text-gray-700 dark:text-gray-300">
+                                                                    {exp.Responsibilities.map((item, i) => (
+                                                                        <li key={i}>{item}</li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
 
-                                                        <div>
-                                                            <h4 className="font-medium text-gray-900 dark:text-white mb-2">
-                                                                Technologies Used:
-                                                            </h4>
-                                                            <div className="flex flex-wrap gap-2">
-                                                                {exp.technologies.map((tech, i) => (
-                                                                    <span
-                                                                        key={i}
-                                                                        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm"
-                                                                    >
-                                                                        {tech}
-                                                                    </span>
-                                                                ))}
+                                                            <div>
+                                                                <h4 className="font-medium text-gray-900 dark:text-white mb-2">
+                                                                    Technologies Used:
+                                                                </h4>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {exp.Tags.map((tech, i) => (
+                                                                        <span
+                                                                            key={i}
+                                                                            className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm"
+                                                                        >
+                                                                            {tech}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </motion.div>
-                                ))}
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+                                        </motion.div>
+                                    );
+                                })}
+
                             </div>
 
                             {/* Additional Info */}

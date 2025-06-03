@@ -134,6 +134,8 @@ export default function ProjectsPage() {
                           <Image
                             src={project.ImageUrl}
                             alt={project.Title}
+                            width={50}
+                            height={50}
                             className="w-full h-full object-cover"
                           />
                         ) : (

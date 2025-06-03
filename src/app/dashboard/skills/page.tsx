@@ -1,38 +1,48 @@
 'use client';
 
-import { useState } from 'react';
-import { Wrench, Plus, Pencil } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Wrench, Plus } from 'lucide-react';
+import { Project } from '@/types/project';
+import { getProjects } from '@/services/projectService/projectService'; 
 
-const initialSkills = [
-  { name: 'JavaScript', level: 'Advanced' },
-  { name: 'React', level: 'Advanced' },
-  { name: 'Node.js', level: 'Intermediate' },
-  { name: 'TypeScript', level: 'Intermediate' },
-  { name: 'Tailwind CSS', level: 'Advanced' },
-  { name: 'Express.js', level: 'Intermediate' },
-  { name: 'SQL', level: 'Intermediate' },
-  { name: 'GraphQL', level: 'Beginner' },
-];
-
-function SkillCard({ name, level, onEdit }: { name: string; level: string; onEdit: () => void }) {
+function SkillCard({
+   name, onEdit }: {
+    readonly name: string;
+    readonly onEdit: () => void }) {
   return (
     <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex justify-between items-start">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{name}</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">{level}</p>
+        <h3 className="text-lg font-semibold text-green-800 dark:text-gray-100">{name}</h3>
       </div>
-      <button
-        onClick={onEdit}
-        className="text-sm px-2 py-1 bg-green-500 hover:bg-green-600 text-white rounded-md"
-      >
-        <Pencil className="w-4 h-4" />
-      </button>
     </div>
   );
 }
 
 export default function SkillsPage() {
-  const [skills] = useState(initialSkills);
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const data = await getProjects();
+        setProjects(data);
+
+        // Extract and flatten tags
+        const allTags = data.flatMap((project) => project.Tags || []);
+        // Remove duplicates
+        const uniqueTags = [...new Set(allTags)];
+        setTags(uniqueTags);
+      } catch (err) {
+        console.error('Failed to fetch projects', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProjects();
+  }, []);
 
   const handleAddSkill = () => {
     alert('Trigger skill creation modal/form');
@@ -58,13 +68,12 @@ export default function SkillsPage() {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {skills.map((skill) => (
+      <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {tags.map((tag) => (
           <SkillCard
-            key={skill.name}
-            name={skill.name}
-            level={skill.level}
-            onEdit={() => handleEditSkill(skill.name)}
+            key={tag}
+            name={tag}
+            onEdit={() => handleEditSkill(tag)}
           />
         ))}
       </div>

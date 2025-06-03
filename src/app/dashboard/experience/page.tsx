@@ -20,15 +20,56 @@ function ExperienceCard({
   onView,
 }: ExperienceCardProps) {
   return (
-    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[180px]">
+    <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[220px]">
       <div>
-        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">{work.CompanyName}</h3>
-        <p className="text-sm text-gray-600 dark:text-gray-300">{work.JobTitle}</p>
-        <p className="text-xs text-gray-500 dark:text-gray-400">
-          {work.StartDate ? new Date(work.StartDate).toLocaleDateString() : ''} - {work.EndDate ? new Date(work.EndDate).toLocaleDateString() : 'Present'}
+        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">
+          {work.CompanyName}
+        </h3>
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          {work.JobTitle}
         </p>
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">{work.Description}</p>
+        <p className="text-xs text-gray-500 dark:text-gray-400">
+          {work.StartDate
+            ? new Date(work.StartDate).toLocaleDateString()
+            : ''}{" "}
+          -{" "}
+          {work.EndDate
+            ? new Date(work.EndDate).toLocaleDateString()
+            : 'Present'}
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+          {work.Description}
+        </p>
+
+        {/* Responsibilities */}
+        {work.Responsibilities && work.Responsibilities.length > 0 && (
+          <div className="mt-2">
+            <h4 className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+              Responsibilities:
+            </h4>
+            <ul className="list-disc pl-4 text-xs text-gray-600 dark:text-gray-400">
+              {work.Responsibilities.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Tags */}
+        {work.Tags && work.Tags.length > 0 && (
+          <div className="mt-2 flex flex-wrap gap-1">
+            {work.Tags.map((tag, index) => (
+              <span
+                key={index}
+                className="bg-teal-100 dark:bg-teal-800 text-teal-800 dark:text-teal-100 text-xs px-2 py-0.5 rounded"
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
+
       <div className="flex gap-2 mt-4">
         <button
           onClick={onEdit}
@@ -52,6 +93,7 @@ function ExperienceCard({
     </div>
   );
 }
+
 
 export default function ExperiencePage() {
   const router = useRouter();

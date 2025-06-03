@@ -12,12 +12,12 @@ function ProjectCard({
   onEdit,
   onDelete,
   onView,
-}: {
+}: Readonly<{
   project: Project;
   onEdit: () => void;
   onDelete: () => void;
   onView: () => void;
-}) {
+}>) {
   return (
     <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 p-4 rounded-lg shadow-sm hover:shadow-md transition flex flex-col justify-between min-h-[320px]">
       {project.ImageUrl && (

@@ -14,6 +14,9 @@ export const normalizeWorkDto = (work: WorkDto): WorkDto => {
         JobTitle: work.JobTitle,
         LogoUrl: work.LogoUrl,
         Description: work.Description,
+        Responsibilities: work.Responsibilities || [],
+        Tags: work.Tags || [],
+        Location: work.Location || "",
         StartDate: work.StartDate,
         EndDate: work.EndDate,
     }
