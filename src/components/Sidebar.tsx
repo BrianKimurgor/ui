@@ -10,10 +10,12 @@ import {
   GraduationCap,
   Share2,
   Brain,
+  UserCheck,
 } from 'lucide-react';
 
 const links = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard/Profile', label: '  Profile', icon: UserCheck },
   { href: '/dashboard/badges', label: 'Badges', icon: BadgeCheck },
   { href: '/dashboard/projects', label: 'Projects', icon: Briefcase },
   { href: '/dashboard/experience', label: 'Experience', icon: BookOpen },
