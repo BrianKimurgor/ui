@@ -11,6 +11,8 @@ import {
   Folder,
   Briefcase,
   Home,
+  FileBadge,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -45,6 +47,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { href: '/downloadcv', icon: <FileText size={24} />, label: 'Resume' },
     { href: '/projects', icon: <Folder size={24} />, label: 'Projects' },
     { href: '/experience', icon: <Briefcase size={24} />, label: 'Experience' },
+    { href: '/badges', icon: <FileBadge size={24} />, label: 'Badges' },
+    { href: '/certifications', icon: <ShieldCheck size={24} />, label: 'Certifications' },
   ];
 
   return (
@@ -57,7 +61,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="sidebar fixed top-0 left-0 h-full bg-white dark:bg-gray-900 shadow-lg flex flex-col items-center justify-center z-40 md:w-20 w-20"
         >
-          <div className="flex flex-col items-center space-y-8">
+          <div className="flex flex-col items-center space-y-6">
             {navItems.map((item) => (
               <NavItem
                 key={item.href}
