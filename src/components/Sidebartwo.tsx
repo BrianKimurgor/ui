@@ -13,6 +13,7 @@ import {
   Home,
   FileBadge,
   ShieldCheck,
+  UserCheck,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -46,6 +47,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     { href: '/contact', icon: <Mail size={24} />, label: 'Contact' },
     { href: '/downloadcv', icon: <FileText size={24} />, label: 'Resume' },
     { href: '/projects', icon: <Folder size={24} />, label: 'Projects' },
+    { href: '/profile', icon: <UserCheck size={24} />, label: 'Profile' },
     { href: '/experience', icon: <Briefcase size={24} />, label: 'Experience' },
     { href: '/badges', icon: <FileBadge size={24} />, label: 'Badges' },
     { href: '/certifications', icon: <ShieldCheck size={24} />, label: 'Certifications' },
